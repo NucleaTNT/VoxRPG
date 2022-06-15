@@ -1,33 +1,28 @@
-using System;
+using Dev.NucleaTNT.VoxRPG.CameraUtils;
 using UnityEngine;
 
-namespace Dev.NucleaTNT.VoxRPG.Utilities
+namespace Dev.NucleaTNT.VoxRPG
 {
 	public class GameManager : MonoBehaviour
 	{
-		private static GameManager s_instance;
-		public static GameManager Instance => s_instance;
-
-		[SerializeField] private Camera _mainCamera;
-		[SerializeField] private CameraRaycaster _cameraRaycaster;
-
-		public Camera MainCamera => _mainCamera;
-		public CameraRaycaster CameraRaycaster => _cameraRaycaster;
+		public static GameManager Instance { get; private set; }
+		public Camera GameCamera { get; private set; }
 
 		private void Awake()
 		{
 			SingletonCheck();
-
-			if (!_mainCamera) _mainCamera = Camera.main;
-			if (!_cameraRaycaster) 
-				if (!_mainCamera.gameObject.TryGetComponent<CameraRaycaster>(out _cameraRaycaster)) 
-					_cameraRaycaster = _mainCamera.gameObject.AddComponent<CameraRaycaster>();
+			InitializeComponents();
 		}
 
-        private void SingletonCheck()
+		private void InitializeComponents()
+		{
+			if (GameCamera == null) GameCamera = Camera.main;
+		}
+
+		private void SingletonCheck()
         {
-			if (!Instance) s_instance = this;
+			if (Instance == null) Instance = this;
             if (Instance != this) Destroy(this);
         }
-    }
+	}
 }
